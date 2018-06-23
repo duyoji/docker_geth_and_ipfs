@@ -1,0 +1,25 @@
+version: '3'
+services:
+  ipfs: # https://github.com/ipfspics/ipfspics-server
+    container_name: "ipfs"
+    restart: always
+    expose:
+      - 4001
+      - 8080
+    ports:
+      - 4001:4001
+      - 5001:5001
+      - 8080:8080
+    image: ipfs/go-ipfs
+    volumes:
+      - ~/.ipfs/:/data/ipfs/
+  geth: # https://github.com/m0t0k1ch1/ethereum-docker
+    container_name: geth
+    build: geth
+    image: geth
+    command: --networkid 1234 --nodiscover --maxpeers=0 --datadir=/root/.ethereum --mine --minerthreads=1 --rpc --rpcaddr=0.0.0.0 --rpcport=8545 --rpccorsdomain='*' --rpcapi=admin,db,debug,eth,miner,net,personal,shh,txpool,web3 --ws --wsaddr=0.0.0.0 --wsport=8546 --wsorigins='*' --wsapi=admin,db,debug,eth,miner,net,personal,shh,txpool,web3 --unlock=0xE6e90fcDd98205bd23E0e17f6eC20BA5CaB52228 --password=/root/.ethereum/passwd
+    ports:
+      - 30303:30303
+      - 30303:30303/udp
+      - 8545:8545
+      - 8546:8546
